@@ -39,13 +39,13 @@ export default function NewsItem(props: NewsItemProps) {
   return (
     <div className={classes.root}>
       <div>
+        <Typography color="textSecondary" gutterBottom>
+          Submitted by {props.author}
+        </Typography>
         <Typography variant="h5" component="h3">
           <a href={props.url} target="_blank" rel="noreferrer">
             {props.title}
           </a>
-        </Typography>
-        <Typography color="textSecondary" gutterBottom>
-          Submitted by {props.author}
         </Typography>
       </div>
       <div className={classes.bookmark}>

@@ -1,35 +1,29 @@
 import { Card, CardContent } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { getItem } from "../backend/hackernews";
+import { getItem, HackerNewItemStory } from "../backend/hackernews";
 import { NewsItem } from "../components";
 import { useBookmarks } from "../store";
+import CommentSectionContainer from "./comment-section.container";
 
 type StoryContainerProps = { storyID: number };
 
-export default function ({ storyID }: StoryContainerProps) {
-  const [story, setStory] = useState<{
-    id: number;
-    title: string;
-    url: string;
-    author: string;
-    bookmarked: boolean;
-  } | null>(null);
+export default function StoryContainer({ storyID }: StoryContainerProps) {
+  const [story, setStory] = useState<
+    (HackerNewItemStory & { bookmarked: boolean }) | null
+  >(null);
   const { bookmark, unbookmark, isBookmarked } = useBookmarks();
 
   useEffect(() => {
     const fetch = async () => {
-      const { title, url, by } = await getItem(storyID);
+      const story = await getItem(storyID, { type: "story" });
       setStory({
-        id: storyID,
-        title,
-        url,
-        author: by,
-        bookmarked: isBookmarked(storyID),
+        ...story,
+        bookmarked: isBookmarked(story.id),
       });
     };
 
     fetch();
-  }, []);
+  }, [storyID]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const bookmarkChange = async (bookmarked: boolean) => {
     bookmarked ? bookmark(story!.id) : unbookmark(story!.id);
@@ -41,7 +35,16 @@ export default function ({ storyID }: StoryContainerProps) {
     <Card variant="outlined">
       <CardContent>
         {story && (
-          <NewsItem {...story} onBookmarkChange={bookmarkChange}></NewsItem>
+          <>
+            <NewsItem
+              title={story.title}
+              author={story.by}
+              url={story.url}
+              bookmarked={story.bookmarked}
+              onBookmarkChange={bookmarkChange}
+            ></NewsItem>
+            <CommentSectionContainer parent={story!}></CommentSectionContainer>
+          </>
         )}
       </CardContent>
     </Card>

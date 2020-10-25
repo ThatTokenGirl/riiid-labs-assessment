@@ -27,10 +27,14 @@ const useStyles = makeStyles({
 });
 
 const routes = [
-  { name: "Home", icon: HomeIcon, path: "/home" },
-  { name: "Bookmarks", icon: BookmarkIcon, path: "/bookmarks" },
-  { name: "Notifications", icon: NotificationsIcon, path: "/notifications" },
-  { name: "History", icon: HistoryIcon, path: "/history" },
+  { name: "Home", icon: <HomeIcon />, path: "/home" },
+  { name: "Bookmarks", icon: <BookmarkIcon />, path: "/bookmarks" },
+  {
+    name: "Notifications",
+    icon: <NotificationsIcon />,
+    path: "/notifications",
+  },
+  { name: "History", icon: <HistoryIcon />, path: "/history" },
 ];
 
 export default function Sidebar() {
@@ -48,15 +52,13 @@ export default function Sidebar() {
       <Toolbar></Toolbar>
       <Divider></Divider>
       <List>
-        {routes.map(({ name, icon: Icon, path }) => {
+        {routes.map(({ name, icon, path }) => {
           const matches = matchPath(pathname, path);
 
           return (
             <Fragment key={name}>
               <ListItem button onClick={() => history.push(path)}>
-                <ListItemIcon>
-                  <Icon className={matches ? classes.selected : ""} />
-                </ListItemIcon>
+                <ListItemIcon>{icon}</ListItemIcon>
                 <ListItemText
                   classes={{ primary: matches ? classes.selected : "" }}
                 >
