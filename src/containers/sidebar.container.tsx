@@ -12,9 +12,10 @@ import React, { Fragment } from "react";
 
 import HomeIcon from "@material-ui/icons/Home";
 import BookmarkIcon from "@material-ui/icons/BookmarkBorder";
-import NotificationsIcon from "@material-ui/icons/Notifications";
 import HistoryIcon from "@material-ui/icons/History";
 import { matchPath, useHistory, useLocation } from "react-router-dom";
+import NotificationsIndicator from "../components/notifications-indicator";
+import { useNotifications } from "../store/notifications";
 
 const useStyles = makeStyles({
   drawerPaper: {
@@ -26,12 +27,21 @@ const useStyles = makeStyles({
   },
 });
 
+const NotificationsContainer = () => {
+  const { notifications } = useNotifications();
+  return (
+    <NotificationsIndicator
+      count={notifications.filter((x) => !x.seen).length}
+    ></NotificationsIndicator>
+  );
+};
+
 const routes = [
   { name: "Home", icon: <HomeIcon />, path: "/home" },
   { name: "Bookmarks", icon: <BookmarkIcon />, path: "/bookmarks" },
   {
     name: "Notifications",
-    icon: <NotificationsIcon />,
+    icon: <NotificationsContainer />,
     path: "/notifications",
   },
   { name: "History", icon: <HistoryIcon />, path: "/history" },
