@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import "./App.css";
 import { BookmarkedCommentWatcherContainer, Sidebar } from "./containers";
-import { BookmarksPage, HomePage } from "./pages";
+import { BookmarksPage, HomePage, NotificationsPage } from "./pages";
 
 function App() {
   return (
@@ -16,6 +16,9 @@ function App() {
           </Route>
           <Route path="/bookmarks">
             <BookmarksPage />
+          </Route>
+          <Route path="/notifications">
+            <NotificationsPage />
           </Route>
           <Route exact path="/">
             <Redirect to="/home"></Redirect>

@@ -2,6 +2,7 @@ import { add, CommentNotification } from "./actions";
 import { useCallback, useContext } from "react";
 import { StoreContext } from "../context";
 
+export * from "./actions";
 export { default as notificationsReducer } from "./reducer";
 
 export const useNotifications = () => {
@@ -20,9 +21,16 @@ export const useNotifications = () => {
     },
     [dispatch]
   );
+  const markSeen = useCallback(
+    (refID: string) => {
+      dispatch(markSeen(refID));
+    },
+    [dispatch]
+  );
 
   return {
     notifications,
     comment,
+    markSeen,
   };
 };

@@ -20,6 +20,7 @@ export type HackerNewItemStory = _HackerNewItem & {
 export type HackerNewItemComment = _HackerNewItem & {
   type: "comment";
   text: string;
+  parent: number;
 };
 
 export type HackerNewsItem = HackerNewItemStory | HackerNewItemComment;
