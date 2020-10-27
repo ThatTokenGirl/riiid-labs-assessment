@@ -2,7 +2,7 @@ import React, { ComponentType, useEffect, useRef } from "react";
 import { useIsVisible } from "../hooks";
 
 type MakeViewableProps<T> = T & {
-  onVisibleTransition?: (visible: boolean) => void;
+  onVisibleChange?: (visible: boolean) => void;
 };
 
 export default function makeViewable<TProps>(props?: { rootMargin?: string }) {
@@ -11,15 +11,15 @@ export default function makeViewable<TProps>(props?: { rootMargin?: string }) {
   return (
     Component: ComponentType<TProps>
   ): ComponentType<MakeViewableProps<TProps>> => {
-    return ({ onVisibleTransition, ...props }: MakeViewableProps<TProps>) => {
+    return ({ onVisibleChange, ...props }: MakeViewableProps<TProps>) => {
       const ref = useRef();
       const visible = useIsVisible({ ref, rootMargin });
 
       useEffect(() => {
-        if (onVisibleTransition) {
-          onVisibleTransition(visible);
+        if (onVisibleChange) {
+          onVisibleChange(visible);
         }
-      }, [visible, onVisibleTransition]);
+      }, [visible, onVisibleChange]);
 
       return <Component ref={ref} {...(props as TProps)} />;
     };

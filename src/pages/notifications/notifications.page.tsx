@@ -1,38 +1,38 @@
-import { Card, CardContent, makeStyles, Typography } from "@material-ui/core";
+import { Card, CardContent } from "@material-ui/core";
 import React from "react";
-import { useNotifications } from "../../store/notifications";
-import CommentNotification from "./containers/comment-notification.containers";
+import { PageHeader } from "../../components";
+import infiniteScroll from "../../hoc/infinitescroller";
+import {
+  CommentNotification,
+  useNotifications,
+} from "../../store/notifications";
+import CommentNotificationContainer from "./containers/comment-notification.containers";
 
-const useStyles = makeStyles({
-  label: {
-    fontWeight: "bold",
-    textTransform: "uppercase",
-    textAlign: "center",
-  },
-});
+const NotificationsContainer = infiniteScroll<CommentNotification, {}>(
+  ({ item: noto }) => (
+    <Card key={noto.refID}>
+      <CardContent>
+        {noto.type === "comment" ? (
+          <CommentNotificationContainer notification={noto} />
+        ) : (
+          false
+        )}
+      </CardContent>
+    </Card>
+  )
+);
 
 const NotificationsPage = () => {
   const { notifications } = useNotifications();
-  const classes = useStyles();
 
   return (
     <>
       {!notifications.length ? (
-        <Typography className={classes.label} variant="h4">
-          You have no notifications
-        </Typography>
+        <PageHeader>You have no notifications</PageHeader>
       ) : (
-        notifications.map((noto) => (
-          <Card key={noto.refID}>
-            <CardContent>
-              {noto.type === "comment" ? (
-                <CommentNotification notification={noto} />
-              ) : (
-                false
-              )}
-            </CardContent>
-          </Card>
-        ))
+        <NotificationsContainer
+          loader={(start, end) => notifications.slice(start, end)}
+        ></NotificationsContainer>
       )}
     </>
   );

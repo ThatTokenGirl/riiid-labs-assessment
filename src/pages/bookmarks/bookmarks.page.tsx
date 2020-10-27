@@ -1,31 +1,20 @@
-import { makeStyles, Typography } from "@material-ui/core";
 import React from "react";
+import { PageHeader } from "../../components";
 import { StoryContainer } from "../../containers";
 import infiniteScroll from "../../hoc/infinitescroller";
 import { useBookmarks } from "../../store";
 
-const useStyles = makeStyles({
-  label: {
-    fontWeight: "bold",
-    textTransform: "uppercase",
-    textAlign: "center",
-  },
-});
+const BookmarksContainer = infiniteScroll<number, {}>(({ item }) => (
+  <StoryContainer storyID={item}></StoryContainer>
+));
 
 const BookmarksPage = () => {
-  const classes = useStyles();
   const { bookmarks } = useBookmarks();
 
-  const Component = infiniteScroll({
-    loader: (start, end) => bookmarks.slice(start, end),
-  })(({ item }) => <StoryContainer storyID={item}></StoryContainer>);
-
   return bookmarks.length ? (
-    <Component />
+    <BookmarksContainer loader={(start, end) => bookmarks.slice(start, end)} />
   ) : (
-    <Typography className={classes.label} variant="h4">
-      Nothing has been bookmarked
-    </Typography>
+    <PageHeader>Nothing has been bookmarked</PageHeader>
   );
 };
 

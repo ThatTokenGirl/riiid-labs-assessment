@@ -4,7 +4,8 @@ import { Notification } from "./notifications/actions";
 export const initialState: {
   bookmarks: number[];
   notifications: Notification[];
-} = { bookmarks: [], notifications: [] };
+  history: number[];
+} = { bookmarks: [], notifications: [], history: [] };
 export const StoreContext = createContext<[typeof initialState, Dispatch<any>]>(
   [initialState, () => initialState]
 );
